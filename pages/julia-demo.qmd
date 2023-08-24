@@ -1,0 +1,83 @@
+---
+title: "Makie Demo"
+author: "Alter Ego"
+date: "08/18/2023"
+format:
+  html:
+    code-fold: true
+jupyter: julia-1.9
+---
+
+
+## Parametric Plots
+
+Plot function pair (x(u), y(u)). 
+See @fig-parametric for an example.
+
+```{julia}
+#| label: fig-parametric
+#| fig-cap: "Parametric Plots"
+
+using CairoMakie
+
+f = Figure()
+ax = Axis(f[1, 1])
+x = range(0, 10, length=100)
+y = sin.(x)
+lines!(ax, x, y)
+f
+```
+
+
+```{julia}
+plot(0 .. 2, x -> x^2)
+```
+
+
+## Passing variables to Observable
+
+```{julia}
+ojs_define(a="some string data")
+```
+
+```{ojs}
+a
+```
+
+
+```{julia}
+using DataFrames
+
+df = DataFrame(A=randn(100), B=randn(100))
+df
+```
+
+
+```{julia}
+ojs_define(df=df)
+```
+
+```{ojs}
+Plot.dot(df, {x: "A", y: "B"}).plot({grid: true})
+```
+
+```{ojs}
+Plot.plot({
+    x: {label: "Fuel consumption (gallons per 100 miles)"},
+    y: {label: "Horsepower"},
+    marks: [
+        Plot.dot(df, {
+            x: "A",
+            y: "B"}
+            )
+    ]
+})
+```
+
+```{julia}
+ojs_define(x=randn(10000))
+```
+
+```{ojs}
+Plot.rectY({length: 10000}, Plot.binX({y: "count"}, {x: x})).plot()
+```
